@@ -1,0 +1,70 @@
+# Laravel & Google Drive Storage
+
+#### Demo project with Laravel 5.4
+
+Look at the commit history to see each of the steps I have taken to set this up.
+
+## Set up this demo project locally
+
+```
+git clone git@github.com:ivanvermeyen/laravel-google-drive-demo.git
+composer install
+```
+
+### I took care of this:
+
+This will also install only [one additional package](https://github.com/nao-pon/flysystem-google-drive) that is not included by Laravel out of the box:
+
+```
+"nao-pon/flysystem-google-drive": "~1.1"
+```
+
+I have included a [GoogleDriveServiceProvider](app/Providers/GoogleDriveServiceProvider.php) which I have added to the `providers` array in [`config/app.php`](config/app.php), and added a `google` disk in [`config/filesystems.php`](config/filesystems.php):
+
+```php
+'disks' => [
+
+    // ...
+
+    'google' => [
+        'driver' => 'google',
+        'clientId' => env('GOOGLE_DRIVE_CLIENT_ID'),
+        'clientSecret' => env('GOOGLE_DRIVE_CLIENT_SECRET'),
+        'refreshToken' => env('GOOGLE_DRIVE_REFRESH_TOKEN'),
+        'folderId' => env('GOOGLE_DRIVE_FOLDER_ID'),
+    ],
+
+    // ...
+
+],
+```
+
+## Create your Google Drive API keys
+
+Detailed information on how to obtain your API ID, secret and refresh token:
+
+-   [Getting your Client ID and Secret](README/1-getting-your-dlient-id-and-secret.md)
+-   [Getting your Refresh Token](README/2-getting-your-refresh-token.md)
+-   [Getting your Root Folder ID](README/3-getting-your-root-folder-id.md)
+
+## Update `.env` file
+
+Add the keys you created to your `.env` file and set `google` as your default cloud storage. You can copy the [`.env.example`](.env.example) file and fill in the blanks.
+
+```
+FILESYSTEM_CLOUD=google
+GOOGLE_DRIVE_CLIENT_ID=xxx.apps.googleusercontent.com
+GOOGLE_DRIVE_CLIENT_SECRET=xxx
+GOOGLE_DRIVE_REFRESH_TOKEN=xxx
+GOOGLE_DRIVE_FOLDER_ID=null
+```
+
+## Available routes
+
+| Route | Description                              |
+| ----- | ---------------------------------------- |
+| /put  | Puts a new `test.txt` file to Google Drive |
+| /list | Lists all files in Google Drive (root directory, not recursive by default) |
+| /get  | Finds and downloads the `test.txt` file from Google Drive |
+
+This is a very basic example to get you started. To see the logic behind these routes, check [`routes/web.php`](routes/web.php).

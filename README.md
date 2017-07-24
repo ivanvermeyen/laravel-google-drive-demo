@@ -61,10 +61,12 @@ GOOGLE_DRIVE_FOLDER_ID=null
 
 ## Available routes
 
-| Route | Description                              |
-| ----- | ---------------------------------------- |
-| /put  | Puts a new `test.txt` file to Google Drive |
-| /list | Lists all files in Google Drive (root directory, not recursive by default) |
-| /get  | Finds and downloads the `test.txt` file from Google Drive |
+| Route       | Description                              |
+| ----------- | ---------------------------------------- |
+| /put        | Puts a new `test.txt` file to Google Drive |
+| /list       | Lists all files in Google Drive (root directory, not recursive by default) |
+| /get        | Finds and downloads the `test.txt` file from Google Drive |
+| /create-dir | Creates a new `Test Dir` sub directory   |
+| /put-in-dir | Puts a new `test.txt` file to the `Test Dir` sub directory |
 
 This is a very basic example to get you started. To see the logic behind these routes, check [`routes/web.php`](routes/web.php).

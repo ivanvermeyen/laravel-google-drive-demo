@@ -50,3 +50,26 @@ Route::get('get', function() {
         ->header('ContentType', $file['mimetype'])
         ->header('Content-Disposition', "attachment; filename='$filename'");
 });
+
+Route::get('create-dir', function() {
+    Storage::cloud()->makeDirectory('Test Dir');
+    return 'Directory was created in Google Drive';
+});
+
+Route::get('put-in-dir', function() {
+    $dir = '/';
+    $recursive = false; // Get subdirectories also?
+    $contents = collect(Storage::cloud()->listContents($dir, $recursive));
+
+    $dir = $contents->where('type', '=', 'dir')
+        ->where('filename', '=', 'Test Dir')
+        ->first(); // There could be duplicate directory names!
+
+    if ( ! $dir) {
+        return 'Directory does not exist!';
+    }
+
+    Storage::cloud()->put($dir['path'].'/test.txt', 'Hello World');
+
+    return 'File was created in the sub directory in Google Drive';
+});

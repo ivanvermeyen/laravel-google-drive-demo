@@ -73,3 +73,21 @@ Route::get('put-in-dir', function() {
 
     return 'File was created in the sub directory in Google Drive';
 });
+
+Route::get('newest', function() {
+    $filename = 'test.txt';
+
+    Storage::cloud()->put($filename, \Carbon\Carbon::now()->toDateTimeString());
+
+    $dir = '/';
+    $recursive = false; // Get subdirectories also?
+
+    $file = collect(Storage::cloud()->listContents($dir, $recursive))
+        ->where('type', '=', 'file')
+        ->where('filename', '=', pathinfo($filename, PATHINFO_FILENAME))
+        ->where('extension', '=', pathinfo($filename, PATHINFO_EXTENSION))
+        ->sortBy('timestamp')
+        ->last();
+
+    return Storage::cloud()->get($file['path']);
+});

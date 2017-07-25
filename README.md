@@ -68,5 +68,6 @@ GOOGLE_DRIVE_FOLDER_ID=null
 | /get        | Finds and downloads the `test.txt` file from Google Drive |
 | /create-dir | Creates a new `Test Dir` sub directory   |
 | /put-in-dir | Puts a new `test.txt` file to the `Test Dir` sub directory |
+| /newest     | Puts a new file to Google Drive and then fetches it |
 
 This is a very basic example to get you started. To see the logic behind these routes, check [`routes/web.php`](routes/web.php).

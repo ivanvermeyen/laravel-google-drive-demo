@@ -29,6 +29,38 @@ Route::get('list', function() {
     return $contents->where('type', '=', 'file'); // files
 });
 
+Route::get('list-folder-contents', function() {
+    // The human readable folder name to get the contents of...
+    // For simplicity, this folder is assumed to exist in the root directory.
+    $folder = 'Test Dir';
+
+    // Get root directory contents...
+    $contents = collect(Storage::cloud()->listContents('/', false));
+
+    // Find the folder you are looking for...
+    $dir = $contents->where('type', '=', 'dir')
+        ->where('filename', '=', $folder)
+        ->first(); // There could be duplicate directory names!
+
+    if ( ! $dir) {
+        return 'No such folder!';
+    }
+
+    // Get the files inside the folder...
+    $files = collect(Storage::cloud()->listContents($dir['path'], false))
+        ->where('type', '=', 'file');
+
+    return $files->mapWithKeys(function($file) {
+        $filename = $file['filename'].'.'.$file['extension'];
+        $path = $file['path'];
+
+        // Use the path to download each file via a generated link..
+        // Storage::cloud()->get($file['path']);
+
+        return [$filename => $path];
+    });
+});
+
 Route::get('get', function() {
     $filename = 'test.txt';
 

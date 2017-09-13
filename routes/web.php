@@ -123,3 +123,46 @@ Route::get('newest', function() {
 
     return Storage::cloud()->get($file['path']);
 });
+
+Route::get('delete', function() {
+    $filename = 'test.txt';
+
+    // First we need to create a file to delete
+    Storage::cloud()->makeDirectory('Test Dir');
+
+    // Now find that file and use its ID (path) to delete it
+    $dir = '/';
+    $recursive = false; // Get subdirectories also?
+    $contents = collect(Storage::cloud()->listContents($dir, $recursive));
+
+    $file = $contents
+        ->where('type', '=', 'file')
+        ->where('filename', '=', pathinfo($filename, PATHINFO_FILENAME))
+        ->where('extension', '=', pathinfo($filename, PATHINFO_EXTENSION))
+        ->first(); // there can be duplicate file names!
+
+    Storage::cloud()->delete($file['path']);
+
+    return 'File was deleted from Google Drive';
+});
+
+Route::get('delete-dir', function() {
+    $directoryName = 'test';
+
+    // First we need to create a directory to delete
+    Storage::cloud()->makeDirectory($directoryName);
+
+    // Now find that directory and use its ID (path) to delete it
+    $dir = '/';
+    $recursive = false; // Get subdirectories also?
+    $contents = collect(Storage::cloud()->listContents($dir, $recursive));
+
+    $directory = $contents
+        ->where('type', '=', 'dir')
+        ->where('filename', '=', $directoryName)
+        ->first(); // there can be duplicate file names!
+
+    Storage::cloud()->deleteDirectory($directory['path']);
+
+    return 'Directory was deleted from Google Drive';
+});

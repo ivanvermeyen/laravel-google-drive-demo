@@ -70,5 +70,7 @@ GOOGLE_DRIVE_FOLDER_ID=null
 | /create-dir           | Creates a new `Test Dir` sub directory   |
 | /put-in-dir           | Puts a new `test.txt` file to the `Test Dir` sub directory |
 | /newest               | Puts a new file to Google Drive and then fetches it |
+| /delete               | Delete a file from Google Drive          |
+| /delete-dir           | Delete an entire directory from Google Drive |
 
 This is a very basic example to get you started. To see the logic behind these routes, check [`routes/web.php`](routes/web.php).

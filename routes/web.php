@@ -166,3 +166,24 @@ Route::get('delete-dir', function() {
 
     return 'Directory was deleted from Google Drive';
 });
+
+Route::get('rename-dir', function() {
+    $directoryName = 'test';
+
+    // First we need to create a directory to rename
+    Storage::cloud()->makeDirectory($directoryName);
+
+    // Now find that directory and use its ID (path) to rename it
+    $dir = '/';
+    $recursive = false; // Get subdirectories also?
+    $contents = collect(Storage::cloud()->listContents($dir, $recursive));
+
+    $directory = $contents
+        ->where('type', '=', 'dir')
+        ->where('filename', '=', $directoryName)
+        ->first(); // there can be duplicate file names!
+
+    Storage::cloud()->move($directory['path'], 'new-test');
+
+    return 'Directory was renamed in Google Drive';
+});

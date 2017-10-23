@@ -59,6 +59,55 @@ GOOGLE_DRIVE_REFRESH_TOKEN=xxx
 GOOGLE_DRIVE_FOLDER_ID=null
 ```
 
+## Using multiple Google Drive accounts
+
+If you want to use multiple Google Drive accounts in a single Laravel app, you need to get the API keys for each one as described above and store them separately in your `.env` file:
+
+```
+MAIN_GOOGLE_DRIVE_CLIENT_ID=xxx.apps.googleusercontent.com
+MAIN_GOOGLE_DRIVE_CLIENT_SECRET=xxx
+MAIN_GOOGLE_DRIVE_REFRESH_TOKEN=xxx
+MAIN_GOOGLE_DRIVE_FOLDER_ID=null
+
+BACKUP_GOOGLE_DRIVE_CLIENT_ID=xxx.apps.googleusercontent.com
+BACKUP_GOOGLE_DRIVE_CLIENT_SECRET=xxx
+BACKUP_GOOGLE_DRIVE_REFRESH_TOKEN=xxx
+BACKUP_GOOGLE_DRIVE_FOLDER_ID=null
+```
+
+Then you should add a disk in `config/filesystems.php` for each account using the `google` driver and the account specific keys:
+
+```php
+'main_google' => [
+    'driver' => 'google',
+    'clientId' => env('MAIN_GOOGLE_DRIVE_CLIENT_ID'),
+    'clientSecret' => env('MAIN_GOOGLE_DRIVE_CLIENT_SECRET'),
+    'refreshToken' => env('MAIN_GOOGLE_DRIVE_REFRESH_TOKEN'),
+    'folderId' => env('MAIN_GOOGLE_DRIVE_FOLDER_ID'),
+],
+
+'backup_google' => [
+    'driver' => 'google',
+    'clientId' => env('BACKUP_GOOGLE_DRIVE_CLIENT_ID'),
+    'clientSecret' => env('BACKUP_GOOGLE_DRIVE_CLIENT_SECRET'),
+    'refreshToken' => env('BACKUP_GOOGLE_DRIVE_REFRESH_TOKEN'),
+    'folderId' => env('BACKUP_GOOGLE_DRIVE_FOLDER_ID'),
+],
+```
+
+Now you can access the drives like so:
+
+```php
+$mainDisk = Storage::disk('main_google');
+$backupDisk = Storage::disk('backup_google');
+```
+
+Keep in mind that there can only be one default cloud storage drive, defined by `FILESYSTEM_CLOUD` in your `.env` (or config) file. If you set it to `main_google`, that will be the cloud drive:
+
+```php
+Storage::cloud(); // refers to Storage::disk('main_google')
+```
+
 ## Available routes
 
 | Route                 | Description                              |

@@ -74,5 +74,10 @@ GOOGLE_DRIVE_FOLDER_ID=null
 | /delete               | Delete a file from Google Drive          |
 | /delete-dir           | Delete an entire directory from Google Drive |
 | /rename-dir           | Rename a directory in Google Drive       |
+| /put-get-stream       | Use a stream to store and get larger files |
 
 This is a very basic example to get you started. To see the logic behind these routes, check [`routes/web.php`](routes/web.php).
+
+## Interesting Reads
+
+-   [Upload large files to S3 using Laravel 5](https://murze.be/2015/07/upload-large-files-to-s3-using-laravel-5/) by Freek Van der Herten.

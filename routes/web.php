@@ -92,6 +92,52 @@ Route::get('get', function() {
         ->header('Content-Disposition', "attachment; filename='$filename'");
 });
 
+Route::get('put-get-stream', function() {
+    // Use a stream to upload and download larger files
+    // to avoid exceeding PHP's memory limit.
+
+    // Thanks to @Arman8852's comment:
+    // https://github.com/ivanvermeyen/laravel-google-drive-demo/issues/4#issuecomment-331625531
+    // And this excellent explanation from Freek Van der Herten:
+    // https://murze.be/2015/07/upload-large-files-to-s3-using-laravel-5/
+
+    // Assume this is a large file...
+    $filename = 'laravel.png';
+    $filePath = public_path($filename);
+
+    // Upload using a stream...
+    Storage::cloud()->put($filename, fopen($filePath, 'r+'));
+
+    // Get file listing...
+    $dir = '/';
+    $recursive = false; // Get subdirectories also?
+    $contents = collect(Storage::cloud()->listContents($dir, $recursive));
+
+    // Get file details...
+    $file = $contents
+        ->where('type', '=', 'file')
+        ->where('filename', '=', pathinfo($filename, PATHINFO_FILENAME))
+        ->where('extension', '=', pathinfo($filename, PATHINFO_EXTENSION))
+        ->first(); // there can be duplicate file names!
+
+    //return $file; // array with file info
+
+    // Store the file locally...
+    //$readStream = Storage::cloud()->getDriver()->readStream($file['path']);
+    //$targetFile = storage_path("downloaded-{$filename}");
+    //file_put_contents($targetFile, stream_get_contents($readStream), FILE_APPEND);
+
+    // Stream the file to the browser...
+    $readStream = Storage::cloud()->getDriver()->readStream($file['path']);
+
+    return response()->stream(function () use ($readStream) {
+        fpassthru($readStream);
+    }, 200, [
+        'Content-Type' => $file['mimetype'],
+        //'Content-disposition' => 'attachment; filename="'.$filename.'"', // force download?
+    ]);
+});
+
 Route::get('create-dir', function() {
     Storage::cloud()->makeDirectory('Test Dir');
     return 'Directory was created in Google Drive';

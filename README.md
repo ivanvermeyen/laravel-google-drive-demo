@@ -64,6 +64,7 @@ GOOGLE_DRIVE_FOLDER_ID=null
 | Route                 | Description                              |
 | --------------------- | ---------------------------------------- |
 | /put                  | Puts a new `test.txt` file to Google Drive |
+| /put-existing         | Puts an existing file to Google Drive    |
 | /list                 | Lists all files in Google Drive (root directory, not recursive by default) |
 | /list-folder-contents | List all files in a specific folder      |
 | /get                  | Finds and downloads the `test.txt` file from Google Drive |

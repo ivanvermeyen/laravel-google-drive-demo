@@ -20,6 +20,15 @@ Route::get('put', function() {
     return 'File was saved to Google Drive';
 });
 
+Route::get('put-existing', function() {
+    $filename = 'laravel.png';
+    $filePath = public_path($filename);
+    $fileData = File::get($filePath);
+
+    Storage::cloud()->put($filename, $fileData);
+    return 'File was saved to Google Drive';
+});
+
 Route::get('list', function() {
     $dir = '/';
     $recursive = false; // Get subdirectories also?

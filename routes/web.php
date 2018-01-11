@@ -242,3 +242,28 @@ Route::get('rename-dir', function() {
 
     return 'Directory was renamed in Google Drive';
 });
+
+Route::get('share', function() {
+    $filename = 'test.txt';
+
+    // Store a demo file
+    Storage::cloud()->put($filename, 'Hello World');
+
+    // Get the file to find the ID
+    $dir = '/';
+    $recursive = false; // Get subdirectories also?
+    $contents = collect(Storage::cloud()->listContents($dir, $recursive));
+    $file = $contents
+        ->where('type', '=', 'file')
+        ->where('filename', '=', pathinfo($filename, PATHINFO_FILENAME))
+        ->where('extension', '=', pathinfo($filename, PATHINFO_EXTENSION))
+        ->first(); // there can be duplicate file names!
+    
+    // Change permissions
+    $service = Storage::cloud()->getAdapter()->getService();
+    $permission = new \Google_Service_Drive_Permission();
+    $permission->setRole('reader');
+    $permission->setType('anyone');
+    $permission->setAllowFileDiscovery(false);
+    $permissions = $service->permissions->create($file['path'], $permission);
+});

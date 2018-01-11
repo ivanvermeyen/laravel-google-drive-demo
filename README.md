@@ -124,6 +124,7 @@ Storage::cloud(); // refers to Storage::disk('main_google')
 | /delete-dir           | Delete an entire directory from Google Drive |
 | /rename-dir           | Rename a directory in Google Drive       |
 | /put-get-stream       | Use a stream to store and get larger files |
+| /share                | Change permissions to share a file with the public |
 
 This is a very basic example to get you started. To see the logic behind these routes, check [`routes/web.php`](routes/web.php).
 

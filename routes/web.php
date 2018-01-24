@@ -265,5 +265,5 @@ Route::get('share', function() {
     $permission->setRole('reader');
     $permission->setType('anyone');
     $permission->setAllowFileDiscovery(false);
-    $permissions = $service->permissions->create($file['path'], $permission);
+    $permissions = $service->permissions->create($file['basename'], $permission);
 });

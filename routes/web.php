@@ -143,6 +143,29 @@ Route::get('create-dir', function() {
     return 'Directory was created in Google Drive';
 });
 
+Route::get('create-sub-dir', function() {
+    // Create parent dir
+    Storage::cloud()->makeDirectory('Test Dir');
+
+    // Find parent dir for reference
+    $dir = '/';
+    $recursive = false; // Get subdirectories also?
+    $contents = collect(Storage::cloud()->listContents($dir, $recursive));
+
+    $dir = $contents->where('type', '=', 'dir')
+        ->where('filename', '=', 'Test Dir')
+        ->first(); // There could be duplicate directory names!
+
+    if ( ! $dir) {
+        return 'Directory does not exist!';
+    }
+
+    // Create sub dir
+    Storage::cloud()->makeDirectory($dir['path'].'/Sub Dir');
+
+    return 'Sub Directory was created in Google Drive';
+});
+
 Route::get('put-in-dir', function() {
     $dir = '/';
     $recursive = false; // Get subdirectories also?
@@ -258,7 +281,7 @@ Route::get('share', function() {
         ->where('filename', '=', pathinfo($filename, PATHINFO_FILENAME))
         ->where('extension', '=', pathinfo($filename, PATHINFO_EXTENSION))
         ->first(); // there can be duplicate file names!
-    
+
     // Change permissions
     $service = Storage::cloud()->getAdapter()->getService();
     $permission = new \Google_Service_Drive_Permission();

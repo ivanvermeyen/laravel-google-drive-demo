@@ -117,7 +117,8 @@ Storage::cloud(); // refers to Storage::disk('main_google')
 | /list                 | Lists all files in Google Drive (root directory, not recursive by default) |
 | /list-folder-contents | List all files in a specific folder      |
 | /get                  | Finds and downloads the `test.txt` file from Google Drive |
-| /create-dir           | Creates a new `Test Dir` sub directory   |
+| /create-dir           | Creates a `Test Dir` directory   |
+| /create-sub-dir       | Creates a `Test Dir` directory and a `Sub Dir` sub directory |
 | /put-in-dir           | Puts a new `test.txt` file to the `Test Dir` sub directory |
 | /newest               | Puts a new file to Google Drive and then fetches it |
 | /delete               | Delete a file from Google Drive          |

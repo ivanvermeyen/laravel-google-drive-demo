@@ -289,4 +289,6 @@ Route::get('share', function() {
     $permission->setType('anyone');
     $permission->setAllowFileDiscovery(false);
     $permissions = $service->permissions->create($file['basename'], $permission);
+
+    return Storage::cloud()->url($file['path']);
 });

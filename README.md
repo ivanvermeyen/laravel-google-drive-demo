@@ -126,6 +126,7 @@ Storage::cloud(); // refers to Storage::disk('main_google')
 | /rename-dir           | Rename a directory in Google Drive       |
 | /put-get-stream       | Use a stream to store and get larger files |
 | /share                | Change permissions to share a file with the public |
+| /export/{basename}    | Export a Google doc (to PDF) |
 
 This is a very basic example to get you started. To see the logic behind these routes, check [`routes/web.php`](routes/web.php).
 

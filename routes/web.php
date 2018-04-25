@@ -292,3 +292,11 @@ Route::get('share', function() {
 
     return Storage::cloud()->url($file['path']);
 });
+
+Route::get('export/{basename}', function ($basename) {
+    $service = Storage::cloud()->getAdapter()->getService();
+    $mimeType = 'application/pdf';
+    $export = $service->files->export($basename, $mimeType);
+
+    return response($export->getBody(), 200, $export->getHeaders());
+});

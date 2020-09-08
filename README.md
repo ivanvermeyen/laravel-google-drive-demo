@@ -21,7 +21,7 @@ This will also install only [one additional package](https://github.com/nao-pon/
 "nao-pon/flysystem-google-drive": "~1.1"
 ```
 
-I have included a [GoogleDriveServiceProvider](app/Providers/GoogleDriveServiceProvider.php) which I have added to the `providers` array in [`config/app.php`](config/app.php), and added a `google` disk in [`config/filesystems.php`](config/filesystems.php):
+I have included [GoogleDriveAdapter](app/Providers/GoogleDriveAdapter.php) and [GoogleDriveServiceProvider](app/Providers/GoogleDriveServiceProvider.php) which I have added to the `providers` array in [`config/app.php`](config/app.php), and added a `google` disk in [`config/filesystems.php`](config/filesystems.php):
 
 ```php
 'disks' => [
